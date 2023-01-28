@@ -44,16 +44,16 @@ class mysql_ {
             }
             // prepare the SQL statment.
             $conn = new mysqli($this->hostname, $this->username, $this->password);
-            $sql = $conn->prepare($sql);
+            $sql_obj = $conn->prepare($sql);
             // check if we need to bind any variables to the statement.
             if(!empty($bstring)) {
-                $sql->bind_param($bstring, ...$parray);
+                $sql_obj->bind_param($bstring, ...$parray);
             }
             // execute the statment.
-            $sql->execute();
+            $sql_obj->execute();
             // return the result set.
-            $this->result = $sql->get_result();
-            $sql->close();
+            $this->result = $sql_obj->get_result();
+            $sql_obj->close();
         }
 
         /**
@@ -71,10 +71,10 @@ class mysql_ {
             }
             // prepare the SQL statment.
             $conn = new mysqli($this->hostname, $this->username, $this->password);
-            $sql = $conn->prepare($sql);
+            $sql_obj = $conn->prepare($sql);
             // check if we need to bind any variables to the statement.
             if(!empty($bstring) && !empty($parray)) {
-                $sql->bind_param($bstring, ...$parray);
+                $sql_obj->bind_param($bstring, ...$parray);
             }
             // sanity check to ensure there is where on UPDATE statment.
             if(str_contains($sql, 'WHERE') && !$force) {
@@ -82,9 +82,9 @@ class mysql_ {
                 return false;
             }
             // execute the statment.
-            $sql->execute();
-            $this->result = $sql;
-            $sql->close();
+            $sql_obj->execute();
+            $this->result = $sql_obj;
+            $sql_obj->close();
         }
 
         /**
@@ -102,20 +102,14 @@ class mysql_ {
             }
             $conn = new mysqli($this->hostname, $this->username, $this->password);
             // prepare the SQL statment.
-            $sql = $conn->prepare($sql);
+            $sql_obj = $conn->prepare($sql);
             // check if we need to bind any variables to the statement.
             if(!empty($bstring) && !empty($parray)) {
-                $sql->bind_param($bstring, ...$parray);
-            }
-            // sanity check to ensure there is where on UPDATE statment.
-            if(str_contains($sql, 'WHERE') && !$force) {
-                trigger_error('Warning, there is no WHERE in the INSERT statment. $force === FALSE, stopping execution...');
-                return false;
+                $sql_obj->bind_param($bstring, ...$parray);
             }
             // execute the statment.
-            $sql->execute();
-            $this->result = $sql;
-            $sql->close();            
+            $sql_obj->execute();
+            $this->result = $sql_obj;
         }
 
         /**
@@ -133,10 +127,10 @@ class mysql_ {
             }
             $conn = new mysqli($this->hostname, $this->username, $this->password);
             // prepare the SQL statment.
-            $sql = $conn->prepare($sql);
+            $sql_obj = $conn->prepare($sql);
             // check if we need to bind any variables to the statement.
             if(!empty($bstring) && !empty($parray)) {
-                $sql->bind_param($bstring, ...$parray);
+                $sql_obj->bind_param($bstring, ...$parray);
             }
             // sanity check to ensure there is where on UPDATE statment.
             if(str_contains($sql, 'WHERE') && !$force) {
@@ -144,10 +138,15 @@ class mysql_ {
                 return false;
             }
             // execute the statment.
-            $sql->execute();
-            $this->result = $sql;
-            $sql->close();
+            $sql_obj->execute();
+            $this->result = $sql_obj;
+            $sql_obj->close();
         }
+
+        public static function close($connection) {
+            $connection->close();
+        }
+
         public function sql_exec($sql, $db) {
             $mysqli = mysqli_connect($this->hostname, $this->username, $this->password, $db);
             $result = mysqli_query($mysqli, $sql);
