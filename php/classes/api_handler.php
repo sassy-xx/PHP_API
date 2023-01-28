@@ -295,12 +295,12 @@
             $mysql = new mysql_('localhost');
             // check if the db exists
             $check_sql = "SELECT
-                            `api`
+                            SCHEMA_NAME
                         FROM
                             INFORMATION_SCHEMA.SCHEMATA
                         WHERE
-                            SCHEMA_NAME = `api`";
-            $mysql->sql_select($sql);
+                            SCHEMA_NAME = 'api'";
+            $mysql->sql_select($check_sql);
             if($mysql->result->num_rows == 1) {
                 // The databse already exists
                 return [
