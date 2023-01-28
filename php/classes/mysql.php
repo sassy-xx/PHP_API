@@ -4,7 +4,7 @@ class mysql_ {
     private string $hostname;
     private string $username;
     private string $password;
-    public object $result;
+    public mixed $result;
         public function __construct($db_conn) {
             switch($db_conn) {
                 case 'localhost':
@@ -148,24 +148,10 @@ class mysql_ {
             $this->result = $sql;
             $sql->close();
         }
-        public function sql_exec($sql, $bstring, $parray) {
-            // initial sanity checks
-            if(!empty($bstring) && empty($parray) || !empty($parray) && empty($bstring)) {
-                // only one of the two binder variables is set correctly.
-                trigger_error('Warning, missing a binder variable. Stopping execution.');
-                return false;
-            }
-            $conn = new mysqli($this->hostname, $this->username, $this->password);
-            // prepare the SQL statment.
-            $sql = $conn->prepare($sql);
-            // check if we need to bind any variables to the statement.
-            if(!empty($bstring) && !empty($parray)) {
-                $sql->bind_param($bstring, ...$parray);
-            }
-            // execute the statment.
-            $sql->execute();
-            $this->result = $sql;
-            $sql->close();
+        public function sql_exec($sql, $db) {
+            $mysqli = mysqli_connect($this->hostname, $this->username, $this->password, $db);
+            $result = mysqli_query($mysqli, $sql);
+            $this->result = $result;
         }
     }
 ?>

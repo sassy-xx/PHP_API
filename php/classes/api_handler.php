@@ -233,7 +233,7 @@
                     (1, 'get_token', 1), (2, 'return_date', 1);
             EOM;
             $sql[] = <<<EOM
-                /*!40000 ALTER TABLE `api_endpoints` ENABLE KEYS */
+                /*!40000 ALTER TABLE `api`.`api_endpoints` ENABLE KEYS */
             EOM;
             $sql[] = <<<EOM
                 UNLOCK TABLES;
@@ -252,7 +252,7 @@
                 LOCK TABLES `api`.`api_keys` WRITE;
             EOM;
             $sql[] = <<<EOM
-                /*!40000 ALTER TABLE `api_keys` DISABLE KEYS */
+                /*!40000 ALTER TABLE `api`.`api_keys` DISABLE KEYS */
             EOM;
             $sql[] = <<<EOM
                 INSERT INTO
@@ -261,7 +261,7 @@
                     ('1460dc644f545ea518fbbe37732d97079c692456d9bad3058ed9b4bcea9c2ee662d5063bd6c336a908c6fc6349ba26a4ecb891bc226184dc223320e2df8fa742', 'a5804571e86143987985ca1c9d5d6789005725128a2aa620c7cef0dc46cd9a4701ae34345180e01cebcfcb3e3ff7153b89fd849c05221755afae6548fa7e8ee9c53220c3de2120aec6ff7e2bcc96c252d0959414f61b1ae8fbbcad695c26443a586f6e8cb4ce353306332589ab8d0459d1545e29b2e7185fd5e6d5d94e86ebe59fc8352f5006af853d84750e8c02c57c6b5499cd72243090555ed8744a1e038ea073afbe8241542267d4b67204b683db35fbc35353f6ea04cb409ea32f0453f826b5c5aa305751ff781869dff60cf35deddf05b49078fde398b9e4f517c1945a6e4ff90e6303212f206345bd14c934d2f947e0400476dfb6eed730f76e5cd5fd', '2023-01-09 16:02:22', NULL, 1);
             EOM;
             $sql[] = <<<EOM
-                /*!40000 ALTER TABLE `api_keys` ENABLE KEYS */
+                /*!40000 ALTER TABLE `api`.`api_keys` ENABLE KEYS */
             EOM;
             $sql[] = <<<EOM
                 UNLOCK TABLES;
@@ -278,7 +278,7 @@
                 LOCK TABLES `api`.`api_permissions` WRITE;
             EOM;
             $sql[] = <<<EOM
-                /*!40000 ALTER TABLE `api_permissions` DISABLE KEYS */
+                /*!40000 ALTER TABLE `api`.`api_permissions` DISABLE KEYS */
             EOM;
             $sql[] = <<<EOM
                 INSERT INTO
@@ -287,7 +287,7 @@
                     (1, '1460dc644f545ea518fbbe37732d97079c692456d9bad3058ed9b4bcea9c2ee662d5063bd6c336a908c6fc6349ba26a4ecb891bc226184dc223320e2df8fa742', 2),(2, '1460dc644f545ea518fbbe37732d97079c692456d9bad3058ed9b4bcea9c2ee662d5063bd6c336a908c6fc6349ba26a4ecb891bc226184dc223320e2df8fa742', 3);
             EOM;
             $sql[] = <<<EOM
-                /*!40000 ALTER TABLE `api_permissions` ENABLE KEYS */
+                /*!40000 ALTER TABLE `api`.`api_permissions` ENABLE KEYS */
             EOM;
             $sql[] = <<<EOM
                 UNLOCK TABLES;
@@ -295,12 +295,12 @@
             $mysql = new mysql_('localhost');
             // check if the db exists
             $check_sql = "SELECT
-                            `api`
+                            SCHEMA_NAME
                         FROM
                             INFORMATION_SCHEMA.SCHEMATA
                         WHERE
-                            SCHEMA_NAME = `api`";
-            $mysql->sql_select($sql);
+                            SCHEMA_NAME = 'api'";
+            $mysql->sql_select($check_sql);
             if($mysql->result->num_rows == 1) {
                 // The databse already exists
                 return [
@@ -309,8 +309,12 @@
                     'error' => DB_ALREADY_EXISTS
                 ];
             }
-            foreach($sql as $sql_stm) {
-                $mysql->sql_exec($sql, '', '', true);
+            for($i = 0; $i < count($sql); $i++) {
+                if($i === 0) {
+                    $mysql->sql_exec($sql[$i], '');
+                } else {
+                    $mysql->sql_exec($sql[$i], 'api');
+                }
             }
             return [
                 'success' => true,
