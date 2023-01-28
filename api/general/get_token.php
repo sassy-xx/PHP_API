@@ -38,8 +38,6 @@
                 ],
                 'error' => false
             ];
-            // JWT::$leeway = 60; // $leeway in seconds
-            // $decoded = JWT::decode($jwt, new Key($key, 'HS256'));
         }
 
         private static function return_secret_key($api_key) {
