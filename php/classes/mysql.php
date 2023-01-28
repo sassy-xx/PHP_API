@@ -34,7 +34,7 @@ class mysql_ {
             * @param string $bstring The bind string to use with binding variables to the prepared statment.
             * @param array $parray The parameter array to bind to the prepared statment.
         **/
-        public function sql_select($sql, $bstring, $parray) {
+        public function sql_select($sql, $bstring = '', $parray = '') {
             // mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
             // initial sanity checks
             if(!empty($bstring) && empty($parray) || !empty($parray) && empty($bstring)) {
@@ -62,7 +62,7 @@ class mysql_ {
             * @param array $parray The parameter array to bind to the prepared statment.
             * @param bool $force If true, the funciton will NOT check for WHERE in the SQL statement.
         **/
-        public function sql_update($sql, $bstring, $parray, $force = false) {
+        public function sql_update($sql, $bstring = '', $parray = '', $force = false) {
             // initial sanity checks
             if(!empty($bstring) && empty($parray) || !empty($parray) && empty($bstring)) {
                 // only one of the two binder variables is set correctly.
@@ -77,7 +77,7 @@ class mysql_ {
                 $sql->bind_param($bstring, ...$parray);
             }
             // sanity check to ensure there is where on UPDATE statment.
-            if(!str_contains($sql, 'WHERE') && !$force) {
+            if(str_contains($sql, 'WHERE') && !$force) {
                 trigger_error('Warning, there is no WHERE in the UPDATE statment. $force === FALSE, stopping execution.');
                 return false;
             }
@@ -93,7 +93,7 @@ class mysql_ {
             * @param array $parray The parameter array to bind to the prepared statment.
             * @param bool $force If true, the funciton will NOT check for WHERE in the SQL statement.
         **/
-        public function sql_insert($sql, $bstring, $parray, $force) {
+        public function sql_insert($sql, $bstring = '', $parray = '', $force = false) {
             // initial sanity checks
             if(!empty($bstring) && empty($parray) || !empty($parray) && empty($bstring)) {
                 // only one of the two binder variables is set correctly.
@@ -108,7 +108,7 @@ class mysql_ {
                 $sql->bind_param($bstring, ...$parray);
             }
             // sanity check to ensure there is where on UPDATE statment.
-            if(!str_contains($sql, 'WHERE') && !$force) {
+            if(str_contains($sql, 'WHERE') && !$force) {
                 trigger_error('Warning, there is no WHERE in the INSERT statment. $force === FALSE, stopping execution...');
                 return false;
             }
@@ -124,7 +124,7 @@ class mysql_ {
             * @param array $parray The parameter array to bind to the prepared statment.
             * @param bool $force If true, the funciton will NOT check for WHERE in the SQL statement.
         **/
-        public function sql_replace_into($sql, $bstring, $parray, $force) {
+        public function sql_replace_into($sql, $bstring = '', $parray = '', $force = false) {
             // initial sanity checks
             if(!empty($bstring) && empty($parray) || !empty($parray) && empty($bstring)) {
                 // only one of the two binder variables is set correctly.
@@ -139,9 +139,28 @@ class mysql_ {
                 $sql->bind_param($bstring, ...$parray);
             }
             // sanity check to ensure there is where on UPDATE statment.
-            if(!str_contains($sql, 'WHERE') && !$force) {
+            if(str_contains($sql, 'WHERE') && !$force) {
                 trigger_error('Warning, there is no WHERE in the REPLACE INTO statment. $force === FALSE, stopping execution...');
                 return false;
+            }
+            // execute the statment.
+            $sql->execute();
+            $this->result = $sql;
+            $sql->close();
+        }
+        public function sql_exec($sql, $bstring, $parray) {
+            // initial sanity checks
+            if(!empty($bstring) && empty($parray) || !empty($parray) && empty($bstring)) {
+                // only one of the two binder variables is set correctly.
+                trigger_error('Warning, missing a binder variable. Stopping execution.');
+                return false;
+            }
+            $conn = new mysqli($this->hostname, $this->username, $this->password);
+            // prepare the SQL statment.
+            $sql = $conn->prepare($sql);
+            // check if we need to bind any variables to the statement.
+            if(!empty($bstring) && !empty($parray)) {
+                $sql->bind_param($bstring, ...$parray);
             }
             // execute the statment.
             $sql->execute();
