@@ -7,7 +7,7 @@
         header('Content-type: application/json');
 
     // Force the application to try to create the DB structure before it looks at any requests (FIRST TIME SETUP ONLY!)
-        $first_time_setup = true;
+        $first_time_setup = false;
     
     // file paths
         $root = $_SERVER['DOCUMENT_ROOT'].'/';
