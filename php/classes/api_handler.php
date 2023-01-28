@@ -9,15 +9,17 @@
         private string $api_endpoint;
         private string $api_token;
         private string $request_method;
+        private mixed $data;
         public array $permissions;
 
-        public function __construct($api_key, $api_secret_key, $api_endpoint, $api_token, $request_method) {
+        public function __construct($api_key, $api_secret_key, $api_endpoint, $api_token, $request_method, $data) {
             // Construct the API hanlder class object
             $this->api_key = $api_key;
             $this->api_secret_key = $api_secret_key;
             $this->api_endpoint = $api_endpoint;
             $this->api_token = $api_token;
             $this->request_method = $request_method;
+            $this->data = $data;
         }
 
         public function check_request_method() {
@@ -41,8 +43,10 @@
             $sql = "SELECT keys.api_key FROM api.api_keys AS `keys` WHERE keys.api_key = ? AND keys.key_enabled = 1";
             $mysql->sql_select($sql, $bstring, $parray);
             if($mysql->result->num_rows !== 1) {
+                mysql_::close($mysql->result);
                 self::error(403, BAD_API_KEY);
             }
+            mysql_::close($mysql->result);
         }
         
         public function check_secret_key() {
@@ -65,8 +69,10 @@
             $mysql = new mysql_('localhost');
             $mysql->sql_select($sql, $bstring, $parray);
             if($mysql->result->num_rows !== 1) {
+                mysql_::close($mysql->result);
                 self::error(403, BAD_API_SECRET_KEY);
             }
+            mysql_::close($mysql->result);
         }
         public function check_endpoint() {
             if(empty(trim($this->api_endpoint))) {
@@ -79,8 +85,10 @@
             $sql = "SELECT endpoints.endpoint_name FROM api.api_endpoints AS `endpoints` WHERE endpoints.endpoint_name = ? AND endpoints.endpoint_enabled = 1";
             $mysql->sql_select($sql, $bstring, $parray);
             if($mysql->result->num_rows !== 1) {
+                mysql_::close($mysql->result);
                 self::error(403, BAD_API_ENDPOINT);
             }
+            mysql_::close($mysql->result);
         }
 
         public function check_token() {
@@ -119,6 +127,7 @@
             $mysql = new mysql_('localhost');
             $mysql->sql_select($sql, $bstring, $parray);
             if($mysql->result->num_rows !== 1) {
+                mysql_::close($mysql->result);
                 return [
                     'success' => false,
                     'data' => null,
@@ -128,7 +137,8 @@
                 ];
             }
             foreach($mysql->result as $k => $v) {
-                // Retur the secret key
+                // Return the secret key
+                mysql_::close($mysql->result);
                 return [
                     'success' => true,
                     'data' => [
@@ -155,17 +165,19 @@
                         pm.endpoint_id = enp.endpoint_id
                     WHERE
                         pm.api_key = ?";
-            $mysql_ = new mysql_('localhost');
-            $mysql_->sql_select($sql, $bstring, $parray);
-            if($mysql_->result->num_rows > 0) {
-                foreach($mysql_->result as $k => $v) {
+            $mysql = new mysql_('localhost');
+            $mysql->sql_select($sql, $bstring, $parray);
+            if($mysql->result->num_rows > 0) {
+                foreach($mysql->result as $k => $v) {
                     if(!isset($this->permissions[$v['endpoint_id']])) {
                         $this->permissions[$v['endpoint_id']] = [];
                     }
                     $this->permissions[$v['endpoint_id']] = xss::xss($v['endpoint_name']);
                 }
+                mysql_::close($mysql->result);
             } else {
                 $this->permissions = [];
+                mysql_::close($mysql->result);
             }
         }
 
@@ -184,7 +196,7 @@
                     if($this->api_endpoint == 'get_token') {
                         $api_endpoint_response = new get_token($this->api_key);
                     } else {
-                        $api_endpoint_response = new $this->api_endpoint;
+                        $api_endpoint_response = new $this->api_endpoint($this->data);
                     }
                     self::return_endpoint_response($api_endpoint_response);
                 }
