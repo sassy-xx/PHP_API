@@ -56,6 +56,8 @@
         $api_token_expired = 'API token has expired!';
         $bad_permissions ='Your API key is not authorized to use this endpoint!';
         $db_exists = 'The database already exists, it would be unwise to proceed. Stopping!';
+        $db_insert_err = 'Something went wrong inserting data into the database.';
+        $bad_params = 'Incorrect parameters passed.';
         $unknown_error = 'An unkown error has occored!';
 
     // definitions of global constants
@@ -83,7 +85,8 @@
         define('DB_READREP_USERNAME', $readrep_username);
         define('DB_READREP_PASSWORD', $readrep_password);
         define('DB_ALREADY_EXISTS', $db_exists);
-
+        define('INSERT_DB_ERROR', $db_insert_err);
+        define('INCORRECT_PARAMETERS', $bad_params);
     // require the main functions file (global functions etc)
     require_once(DOCUMENT_ROOT.'/php/includes/functions.php');
     
