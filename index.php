@@ -11,10 +11,11 @@
     $api_secret_key = '';
     $api_endpoint = '';
     $api_token = '';
-
+    $data = [];
     // set easy vars
     foreach($_REQUEST as $k => $v) {
         $$k = $v;
+        $data[$k] = $v;
     }
     
     if(isset($api_endpoint) && !empty(trim($api_endpoint))) {
@@ -34,7 +35,7 @@
     }
 
     // inittialise the API handler class
-    $api = new api_handler($api_key, $api_secret_key, $api_endpoint, $api_token, $request_method);
+    $api = new api_handler($api_key, $api_secret_key, $api_endpoint, $api_token, $request_method, $data);
     // Check the request method is valid
     $api->check_request_method();
     // Check the API key is valid
