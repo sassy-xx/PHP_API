@@ -5,6 +5,9 @@
     
     // Force appication/json returns from the server
         header('Content-type: application/json');
+
+    // Force the application to try to create the DB structure before it looks at any requests (FIRST TIME SETUP ONLY!)
+        $first_time_setup = true;
     
     // file paths
         $root = $_SERVER['DOCUMENT_ROOT'].'/';
@@ -52,6 +55,7 @@
         $bad_api_token = 'API token is missing or invalid!';
         $api_token_expired = 'API token has expired!';
         $bad_permissions ='Your API key is not authorized to use this endpoint!';
+        $db_exists = 'The database already exists, it would be unwise to proceed. Stopping!';
         $unknown_error = 'An unkown error has occored!';
 
     // definitions of global constants
@@ -78,6 +82,7 @@
         define('DB_READREP_HOSTNAME', $readrep_hostname);
         define('DB_READREP_USERNAME', $readrep_username);
         define('DB_READREP_PASSWORD', $readrep_password);
+        define('DB_ALREADY_EXISTS', $db_exists);
 
     // require the main functions file (global functions etc)
     require_once(DOCUMENT_ROOT.'/php/includes/functions.php');
@@ -89,5 +94,11 @@
     $auto_load = new file_finder(DOCUMENT_ROOT.'/php/includes/auto_loader/');
     foreach($auto_load->files as $v) {
         require_once($v);
+    }
+    if($first_time_setup === true) {
+        $first_time_setup = api_handler::first_time_setup();
+        if(!$first_time_setup['success']) {
+            trigger_error($first_time_setup['error'], E_USER_WARNING);
+        }
     }
 ?>
