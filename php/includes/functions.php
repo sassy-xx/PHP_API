@@ -1,0 +1,4 @@
+<?php
+    // main functions file
+
+?>
