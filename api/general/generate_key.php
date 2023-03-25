@@ -21,7 +21,7 @@
             // initialise the endpoint;
             $this->api_key_enabled = $api_key_enabled;
             $init = self::init($api_key_enabled);
-            if(isset($init['success']) && isset($init['data']) && isset($init['error'])) {
+            if((isset($init['success']) || $init['success'] === false) && (isset($init['data']) || $init['data'] === null) && isset($init['error'])) {
                 $this->success = $init['success'];
                 $this->data = $init['data'];
                 $this->error = $init['error'];

@@ -6,14 +6,14 @@
     class get_token {
         public bool $success;
         public mixed $data;
-        public bool $error;
+        public mixed $error;
         public int $http_code;
         private string $api_key;
         public function __construct($api_key) {
             // initialise the endpoint
             $this->api_key = $api_key;
             $token_result = self::init($this->api_key);
-            if(isset($token_result['success']) && isset($token_result['data']) && isset($token_result['error'])) {
+            if((isset($init['success']) || $init['success'] === false) && (isset($init['data']) || $init['data'] === null) && isset($init['error'])) {
                 $this->success = $token_result['success'];
                 $this->data = $token_result['data'];
                 $this->error = $token_result['error'];
