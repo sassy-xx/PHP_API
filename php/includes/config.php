@@ -29,6 +29,12 @@
         $readrep_username = '';
         $readrep_password = '';
     
+        // selected db connection (for any set using the defined constant)
+            // options are:
+                // localhost
+                // live_conn
+                // readrep
+        $default_db_conn = 'localhost';
     // main API configuration section
 
         // Token expiration time
@@ -57,6 +63,7 @@
         $bad_permissions ='Your API key is not authorized to use this endpoint!';
         $db_exists = 'The database already exists, it would be unwise to proceed. Stopping!';
         $db_insert_err = 'Something went wrong inserting data into the database.';
+        $db_select_err = 'Something went wrong selecting data froom the database.';
         $bad_params = 'Incorrect parameters passed.';
         $unknown_error = 'An unkown error has occored!';
 
@@ -84,8 +91,10 @@
         define('DB_READREP_HOSTNAME', $readrep_hostname);
         define('DB_READREP_USERNAME', $readrep_username);
         define('DB_READREP_PASSWORD', $readrep_password);
+        define('DEFAULT_DB_CONN', $default_db_conn);
         define('DB_ALREADY_EXISTS', $db_exists);
         define('INSERT_DB_ERROR', $db_insert_err);
+        define('SELECT_DB_ERROR', $db_select_err);
         define('INCORRECT_PARAMETERS', $bad_params);
     // require the main functions file (global functions etc)
     require_once(DOCUMENT_ROOT.'/php/includes/functions.php');
