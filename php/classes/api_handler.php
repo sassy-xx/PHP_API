@@ -207,7 +207,7 @@
             if(!empty($api_endpoint_response->http_code)) {
                 http_response_code($api_endpoint_response->http_code);
             }
-            if(!isset($api_endpoint_response->success) || !isset($api_endpoint_response->data) || !isset($api_endpoint_response->error)) {
+            if(!isset($api_endpoint_response->success) || !isset($api_endpoint_response->error)) {
                 // The API endpoint returned without setting the expected public variables
                 trigger_error('The API endpoint returned without setting the expected public variables!', E_USER_NOTICE);
             }
