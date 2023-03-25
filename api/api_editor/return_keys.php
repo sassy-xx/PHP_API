@@ -40,10 +40,10 @@
             $return_array = [];
             foreach($mysql->result as $k => $v) {
                 foreach($v as $kk => $vv) {
-                    if(!isset($return_array[$k][$kk])) {
-                        $return_array[$k][$kk] = [];
+                    if(!isset($return_array[xss::xss($k)][xss::xss($kk)])) {
+                        $return_array[xss::xss($k)][xss::xss($kk)] = [];
                     }
-                    $return_array[$k][$kk] = $vv;
+                    $return_array[xss::xss($k)][xss::xss($kk)] = xss::xss($vv);
                 }
             }
             return [
