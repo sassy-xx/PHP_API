@@ -9,7 +9,7 @@
         public function __construct() {
             // initialise the endpoint
             $init = self::init();
-            if(isset($init['success']) && isset($init['data']) && isset($init['error'])) {
+            if((isset($init['success']) || $init['success'] === false) && (isset($init['data']) || $init['data'] === null) && isset($init['error'])) {
                 $this->success = $init['success'];
                 $this->data = $init['data'];
                 $this->error = $init['error'];
