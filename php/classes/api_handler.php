@@ -9,7 +9,7 @@
         private string $api_endpoint;
         private string $api_token;
         private string $request_method;
-        private mixed $data;
+        private $data;
         public array $permissions;
 
         public function __construct($api_key, $api_secret_key, $api_endpoint, $api_token, $request_method, $data) {
@@ -221,6 +221,7 @@
 
         public static function first_time_setup() {
             // Create the API backend structure
+            echo 'FIRST TIME SETUP IS ON!';
             $sql[] = <<<EOM
                 CREATE DATABASE `api`;
             EOM;

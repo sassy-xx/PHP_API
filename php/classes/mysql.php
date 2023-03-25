@@ -4,7 +4,7 @@ class mysql_ {
     private string $hostname;
     private string $username;
     private string $password;
-    public mixed $result;
+    public $result;
         public function __construct($db_conn) {
             switch($db_conn) {
                 case 'localhost':
