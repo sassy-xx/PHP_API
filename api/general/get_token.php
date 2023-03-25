@@ -28,7 +28,7 @@
             // retrieve the secret_key for this api_key
             $key = self::return_secret_key($api_key);
             if(!$key['success']) {
-                error('403', BAD_API_KEY);
+                api_handler::error('403', BAD_API_KEY);
             }
             $key = $key['data']['secret_key'];
             $payload = [
