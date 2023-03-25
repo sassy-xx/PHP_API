@@ -21,9 +21,15 @@
             // initialise the endpoint;
             $this->api_key_enabled = $api_key_enabled;
             $init = self::init($api_key_enabled);
-            $this->success = $init['success'];
-            $this->data = $init['data'];
-            $this->error = $init['error'];
+            if(isset($init['success']) && isset($init['data']) && isset($init['error'])) {
+                $this->success = $init['success'];
+                $this->data = $init['data'];
+                $this->error = $init['error'];
+            } else {
+                $this->success = false;
+                $this->data = null;
+                $this->error = 'Bad endpoint structure. Missing basic array return.';
+            }
         }
         
         private static function init($api_key_enabled) {
@@ -37,7 +43,7 @@
             $parray = [$api_key, $api_secret_key, $api_key_enabled];
             $bstring = 'ssi';
             $sql = "INSERT INTO api.api_keys VALUES (?, ?, CURRENT_TIMESTAMP(), NULL, ?)";
-            $mysql = new mysql_('localhost');
+            $mysql = new mysql_(DEFAULT_DB_CONN);
             $mysql->sql_insert($sql, $bstring, $parray);
             if($mysql->result->affected_rows !== 1) {
                 // Close the connection

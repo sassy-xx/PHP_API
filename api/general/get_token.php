@@ -5,7 +5,7 @@
 
     class get_token {
         public bool $success;
-        public array $data;
+        public mixed $data;
         public bool $error;
         public int $http_code;
         private string $api_key;
@@ -13,9 +13,15 @@
             // initialise the endpoint
             $this->api_key = $api_key;
             $token_result = self::init($this->api_key);
-            $this->success = $token_result['success'];
-            $this->data = $token_result['data'];
-            $this->error = $token_result['error'];
+            if(isset($token_result['success']) && isset($token_result['data']) && isset($token_result['error'])) {
+                $this->success = $token_result['success'];
+                $this->data = $token_result['data'];
+                $this->error = $token_result['error'];
+            } else {
+                $this->success = false;
+                $this->data = null;
+                $this->error = 'Bad endpoint structure. Missing basic array return.';
+            }
         }
         
         private static function init($api_key) {
@@ -44,7 +50,7 @@
             $parray = [$api_key];
             $bstring = 's';
             $sql = "SELECT keys.secret_key FROM api.api_keys AS `keys` WHERE keys.api_key = ? AND keys.key_enabled = 1";
-            $mysql = new mysql_('localhost');
+            $mysql = new mysql_(DEFAULT_DB_CONN);
             $mysql->sql_select($sql, $bstring, $parray);
             if($mysql->result->num_rows !== 1) {
                 return [
