@@ -13,7 +13,7 @@
             // initialise the endpoint
             $this->api_key = $api_key;
             $token_result = self::init($this->api_key);
-            if((isset($init['success']) || $init['success'] === false) && (isset($init['data']) || $init['data'] === null) && isset($init['error'])) {
+            if((isset($token_result['success']) || $token_result['success'] === false) && (isset($token_result['data']) || $token_result['data'] === null) && isset($token_result['error'])) {
                 $this->success = $token_result['success'];
                 $this->data = $token_result['data'];
                 $this->error = $token_result['error'];
@@ -62,11 +62,11 @@
                 ];
             }
             foreach($mysql->result as $k => $v) {
-                // Retur the secret key
+                // Return the secret key
                 return [
                     'success' => true,
                     'data' => [
-                        'secret_key' => $v['secret_key'],
+                        'secret_key' => xss::xss($v['secret_key']),
                     ],
                     'error' => false
                 ];
