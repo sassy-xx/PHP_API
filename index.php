@@ -17,7 +17,13 @@
         $$k = $v;
         $data[$k] = $v;
     }
-    
+    $body_data = json_decode(file_get_contents('php://input'), true);
+    if(is_array($body_data)) {
+        foreach($body_data as $k => $v) {
+            $$k = $v;
+            $data[$k] = $v;
+        }
+    }
     if(isset($api_endpoint) && !empty(trim($api_endpoint))) {
     } else {
         if($_SERVER['PHP_SELF'] !== 'index.php') {
