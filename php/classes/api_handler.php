@@ -37,7 +37,7 @@
             if(empty($this->api_key)) {
                 self::error(403, BAD_API_KEY);
             }
-            $mysql = new mysql_('localhost');
+            $mysql = new mysql_(DEFAULT_DB_CONN);
             $parray = [$this->api_key];
             $bstring = 's';
             $sql = "SELECT keys.api_key FROM api.api_keys AS `keys` WHERE keys.api_key = ? AND keys.key_enabled = 1";
@@ -66,7 +66,7 @@
                     WHERE
                         ky.api_key = ?
                         AND ky.secret_key = ?;";
-            $mysql = new mysql_('localhost');
+            $mysql = new mysql_(DEFAULT_DB_CONN);
             $mysql->sql_select($sql, $bstring, $parray);
             if($mysql->result->num_rows !== 1) {
                 mysql_::close($mysql->result);
@@ -79,7 +79,7 @@
                 self::error(403, BAD_API_ENDPOINT);
             }
             // check this endpoint is enabled
-            $mysql = new mysql_('localhost');
+            $mysql = new mysql_(DEFAULT_DB_CONN);
             $parray = [$this->api_endpoint];
             $bstring = 's';
             $sql = "SELECT endpoints.endpoint_name FROM api.api_endpoints AS `endpoints` WHERE endpoints.endpoint_name = ? AND endpoints.endpoint_enabled = 1";
@@ -124,7 +124,7 @@
             $parray = [$api_key];
             $bstring = 's';
             $sql = "SELECT keys.secret_key FROM api.api_keys AS `keys` WHERE keys.api_key = ? AND keys.key_enabled = 1";
-            $mysql = new mysql_('localhost');
+            $mysql = new mysql_(DEFAULT_DB_CONN);
             $mysql->sql_select($sql, $bstring, $parray);
             if($mysql->result->num_rows !== 1) {
                 mysql_::close($mysql->result);
@@ -165,7 +165,7 @@
                         pm.endpoint_id = enp.endpoint_id
                     WHERE
                         pm.api_key = ?";
-            $mysql = new mysql_('localhost');
+            $mysql = new mysql_(DEFAULT_DB_CONN);
             $mysql->sql_select($sql, $bstring, $parray);
             if($mysql->result->num_rows > 0) {
                 foreach($mysql->result as $k => $v) {
@@ -305,7 +305,7 @@
             $sql[] = <<<EOM
                 UNLOCK TABLES;
             EOM;
-            $mysql = new mysql_('localhost');
+            $mysql = new mysql_(DEFAULT_DB_CONN);
             // check if the db exists
             $check_sql = "SELECT
                             SCHEMA_NAME
