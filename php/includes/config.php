@@ -63,7 +63,9 @@
         $bad_permissions ='Your API key is not authorized to use this endpoint!';
         $db_exists = 'The database already exists, it would be unwise to proceed. Stopping!';
         $db_insert_err = 'Something went wrong inserting data into the database.';
-        $db_select_err = 'Something went wrong selecting data froom the database.';
+        $db_select_err = 'Something went wrong selecting data from the database.';
+        $db_delete_err = 'Something went wrong deleting data from the database.';
+        $db_udpate_err = 'Something went wrong updating data in the database.';
         $bad_params = 'Incorrect parameters passed.';
         $unknown_error = 'An unkown error has occored!';
 
@@ -95,6 +97,8 @@
         define('DB_ALREADY_EXISTS', $db_exists);
         define('INSERT_DB_ERROR', $db_insert_err);
         define('SELECT_DB_ERROR', $db_select_err);
+        define('DELETE_DB_ERROR', $db_delete_err);
+        define('UPDATE_DB_ERROR', $db_udpate_err);
         define('INCORRECT_PARAMETERS', $bad_params);
     // require the main functions file (global functions etc)
     require_once(DOCUMENT_ROOT.'/php/includes/functions.php');
