@@ -77,13 +77,13 @@ class mysql_ {
                 $sql_obj->bind_param($bstring, ...$parray);
             }
             // sanity check to ensure there is where on UPDATE statment.
-            if(str_contains($sql, 'WHERE') && !$force) {
+            if(!str_contains($sql, 'WHERE') && !$force) {
                 trigger_error('Warning, there is no WHERE in the UPDATE statment. $force === FALSE, stopping execution.');
                 return false;
             }
             // execute the statment.
             $sql_obj->execute();
-            $this->result = $sql_obj;
+            $this->result = $sql_obj->affected_rows;
             $sql_obj->close();
         }
 
@@ -133,13 +133,44 @@ class mysql_ {
                 $sql_obj->bind_param($bstring, ...$parray);
             }
             // sanity check to ensure there is where on UPDATE statment.
-            if(str_contains($sql, 'WHERE') && !$force) {
+            if(!str_contains($sql, 'WHERE') && !$force) {
                 trigger_error('Warning, there is no WHERE in the REPLACE INTO statment. $force === FALSE, stopping execution...');
                 return false;
             }
             // execute the statment.
             $sql_obj->execute();
-            $this->result = $sql_obj;
+            $this->result = $sql_obj->affected_rows;
+            $sql_obj->close();
+        }
+
+        /**
+            * @param string $sql The SQL statment to prepare/execute.
+            * @param string $bstring The bind string to use with binding variables to the prepared statment.
+            * @param array $parray The parameter array to bind to the prepared statment.
+            * @param bool $force If true, the funciton will NOT check for WHERE in the SQL statement.
+        **/
+        public function sql_delete($sql, $bstring = '', $parray = '', $force = false) {
+            // initial sanity checks
+            if(!empty($bstring) && empty($parray) || !empty($parray) && empty($bstring)) {
+                // only one of the two binder variables is set correctly.
+                trigger_error('Warning, missing a binder variable. Stopping execution.');
+                return false;
+            }
+            $conn = new mysqli($this->hostname, $this->username, $this->password);
+            // prepare the SQL statment.
+            $sql_obj = $conn->prepare($sql);
+            // check if we need to bind any variables to the statement.
+            if(!empty($bstring) && !empty($parray)) {
+                $sql_obj->bind_param($bstring, ...$parray);
+            }
+            // sanity check to ensure there is where on UPDATE statment.
+            if(!str_contains($sql, 'WHERE') && !$force) {
+                trigger_error('Warning, there is no WHERE in the DELETE FROM statment. $force === FALSE, stopping execution...');
+                return false;
+            }
+            // execute the statment.
+            $sql_obj->execute();
+            $this->result = $sql_obj->affected_rows;
             $sql_obj->close();
         }
 
