@@ -31,7 +31,7 @@
                 $sql = "DELETE FROM api.api_endpoints e WHERE e.endpoint_id = ?";
                 $mysql = new mysql_(DEFAULT_DB_CONN);
                 $mysql->sql_delete($sql, $bstring, $parray);
-                if($mysql->result !== 1) {
+                if($mysql->result == -1) {
                     return [
                         'success' => false,
                         'data' => null,
