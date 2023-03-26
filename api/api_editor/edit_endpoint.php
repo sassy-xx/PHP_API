@@ -26,13 +26,10 @@
             }
             // look up all of the permissions associated with the passed api key
             if(isset($x_endpoint_id) && !empty($x_endpoint_id) && isset($x_endpoint_name) && !empty($x_endpoint_name) && isset($x_endpoint_enabled)) {
-                switch($x_endpoint_enabled) {
-                    case true:
-                        $x_endpoint_enabled = 1;
-                    break;
-                    case false:
-                        $x_endpoint_enabled = 0;
-                    break;
+                if($x_endpoint_enabled == 'true') {
+                    $x_endpoint_enabled = (int)1;
+                } else {
+                    $x_endpoint_enabled = (int)0;
                 }
                 $parray = [$x_endpoint_name, $x_endpoint_enabled, $x_endpoint_id];
                 $bstring = 'ssi';
