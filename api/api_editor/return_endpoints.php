@@ -23,9 +23,14 @@
         private static function init() {
             // look up all of the current endpoints and return them in a sesnible format
             $sql = "SELECT
-                        *
+                        e.endpoint_id,
+                        e.endpoint_name,
+                        e.endpoint_enabled,
+                        DATE_FORMAT(e.created_timestamp, '%d-%m-%Y %H:%i') AS created_timestamp,
+                        DATE_FORMAT(e.updated_timestamp , '%d-%m-%Y %H:%i') AS updated_timestamp
                     FROM
-                        api.api_endpoints e";
+                        api.api_endpoints e
+                    ORDER BY e.endpoint_id";
             $mysql = new mysql_(DEFAULT_DB_CONN);
             $mysql->sql_select($sql);
             if($mysql->result->num_rows < 1) {
