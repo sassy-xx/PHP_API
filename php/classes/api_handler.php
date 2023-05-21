@@ -226,102 +226,73 @@
                 CREATE DATABASE `api`;
             EOM;
             $sql[] = <<<EOM
-                CREATE TABLE `api`.`api_endpoints` (
+                DROP TABLE IF EXISTS `api_endpoints`;
+            EOM;
+            $sql[] = <<<EOM
+                CREATE TABLE `api_endpoints` (
                     `endpoint_id` int NOT NULL AUTO_INCREMENT,
                     `endpoint_name` varchar(100) NOT NULL,
                     `endpoint_enabled` int NOT NULL DEFAULT '1',
+                    `created_timestamp` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                    `updated_timestamp` datetime NOT NULL,
                     PRIMARY KEY (`endpoint_id`)
-                );
+                ) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
             EOM;
             $sql[] = <<<EOM
-                /*!40000 ALTER TABLE `api`.`api_endpoints` DISABLE KEYS */
+                INSERT INTO `api_endpoints` VALUES (1,'get_token',1,'2023-04-09 00:59:51','0000-00-00 00:00:00'),(2,'create_endpoint',1,'2023-04-09 00:59:51','0000-00-00 00:00:00'),(3,'delete_api_key',1,'2023-04-09 00:59:51','0000-00-00 00:00:00'),(4,'delete_endpoint',1,'2023-04-09 00:59:51','0000-00-00 00:00:00'),(5,'edit_endpoint',1,'2023-04-09 00:59:51','0000-00-00 00:00:00'),(6,'edit_key',1,'2023-04-09 00:59:51','0000-00-00 00:00:00'),(7,'generate_key',1,'2023-04-09 00:59:51','0000-00-00 00:00:00'),(8,'return_endpoints',1,'2023-04-09 00:59:51','0000-00-00 00:00:00'),(9,'return_key_permissions',1,'2023-04-09 00:59:51','0000-00-00 00:00:00'),(10,'return_keys',1,'2023-04-09 00:59:51','0000-00-00 00:00:00'),(11,'return_permission_options',1,'2023-04-09 00:59:51','0000-00-00 00:00:00');
             EOM;
             $sql[] = <<<EOM
-                LOCK TABLES `api`.`api_endpoints` WRITE;
+                DROP TABLE IF EXISTS `api_keys`;
             EOM;
             $sql[] = <<<EOM
-                INSERT INTO
-                    `api_endpoints`
-                VALUES
-                    (1, 'get_token', 1), (2, 'return_date', 1);
-            EOM;
-            $sql[] = <<<EOM
-                /*!40000 ALTER TABLE `api`.`api_endpoints` ENABLE KEYS */
-            EOM;
-            $sql[] = <<<EOM
-                UNLOCK TABLES;
-            EOM;
-            $sql[] = <<<EOM
-                CREATE TABLE `api`.`api_keys` (
+                CREATE TABLE `api_keys` (
                     `api_key` varchar(128) NOT NULL,
                     `secret_key` varchar(512) DEFAULT NULL,
                     `created_timestamp` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
                     `updated_timestamp` datetime DEFAULT NULL,
                     `key_enabled` int NOT NULL DEFAULT '1',
                     PRIMARY KEY (`api_key`)
-                );
+                ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
             EOM;
             $sql[] = <<<EOM
-                LOCK TABLES `api`.`api_keys` WRITE;
+                INSERT INTO `api_keys` VALUES ('1460dc644f545ea518fbbe37732d97079c692456d9bad3058ed9b4bcea9c2ee662d5063bd6c336a908c6fc6349ba26a4ecb891bc226184dc223320e2df8fa742','a5804571e86143987985ca1c9d5d6789005725128a2aa620c7cef0dc46cd9a4701ae34345180e01cebcfcb3e3ff7153b89fd849c05221755afae6548fa7e8ee9c53220c3de2120aec6ff7e2bcc96c252d0959414f61b1ae8fbbcad695c26443a586f6e8cb4ce353306332589ab8d0459d1545e29b2e7185fd5e6d5d94e86ebe59fc8352f5006af853d84750e8c02c57c6b5499cd72243090555ed8744a1e038ea073afbe8241542267d4b67204b683db35fbc35353f6ea04cb409ea32f0453f826b5c5aa305751ff781869dff60cf35deddf05b49078fde398b9e4f517c1945a6e4ff90e6303212f206345bd14c934d2f947e0400476dfb6eed730f76e5cd5fd','2023-01-09 16:02:22',NULL,1);
             EOM;
             $sql[] = <<<EOM
-                /*!40000 ALTER TABLE `api`.`api_keys` DISABLE KEYS */
+                DROP TABLE IF EXISTS `api_permissions`;
             EOM;
             $sql[] = <<<EOM
-                INSERT INTO
-                    `api`.`api_keys`
-                VALUES
-                    ('1460dc644f545ea518fbbe37732d97079c692456d9bad3058ed9b4bcea9c2ee662d5063bd6c336a908c6fc6349ba26a4ecb891bc226184dc223320e2df8fa742', 'a5804571e86143987985ca1c9d5d6789005725128a2aa620c7cef0dc46cd9a4701ae34345180e01cebcfcb3e3ff7153b89fd849c05221755afae6548fa7e8ee9c53220c3de2120aec6ff7e2bcc96c252d0959414f61b1ae8fbbcad695c26443a586f6e8cb4ce353306332589ab8d0459d1545e29b2e7185fd5e6d5d94e86ebe59fc8352f5006af853d84750e8c02c57c6b5499cd72243090555ed8744a1e038ea073afbe8241542267d4b67204b683db35fbc35353f6ea04cb409ea32f0453f826b5c5aa305751ff781869dff60cf35deddf05b49078fde398b9e4f517c1945a6e4ff90e6303212f206345bd14c934d2f947e0400476dfb6eed730f76e5cd5fd', '2023-01-09 16:02:22', NULL, 1);
-            EOM;
-            $sql[] = <<<EOM
-                /*!40000 ALTER TABLE `api`.`api_keys` ENABLE KEYS */
-            EOM;
-            $sql[] = <<<EOM
-                UNLOCK TABLES;
-            EOM;
-            $sql[] = <<<EOM
-                CREATE TABLE `api`.`api_permissions` (
+                CREATE TABLE `api_permissions` (
                     `permission_id` int NOT NULL AUTO_INCREMENT,
                     `api_key` varchar(128) NOT NULL,
                     `endpoint_id` int NOT NULL,
                     PRIMARY KEY (`permission_id`)
-                );
+                ) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
             EOM;
             $sql[] = <<<EOM
-                LOCK TABLES `api`.`api_permissions` WRITE;
-            EOM;
-            $sql[] = <<<EOM
-                /*!40000 ALTER TABLE `api`.`api_permissions` DISABLE KEYS */
-            EOM;
-            $sql[] = <<<EOM
-                INSERT INTO
-                    `api`.`api_permissions`
-                VALUES
-                    (1, '1460dc644f545ea518fbbe37732d97079c692456d9bad3058ed9b4bcea9c2ee662d5063bd6c336a908c6fc6349ba26a4ecb891bc226184dc223320e2df8fa742', 2),(2, '1460dc644f545ea518fbbe37732d97079c692456d9bad3058ed9b4bcea9c2ee662d5063bd6c336a908c6fc6349ba26a4ecb891bc226184dc223320e2df8fa742', 3);
-            EOM;
-            $sql[] = <<<EOM
-                /*!40000 ALTER TABLE `api`.`api_permissions` ENABLE KEYS */
-            EOM;
-            $sql[] = <<<EOM
-                UNLOCK TABLES;
+                INSERT INTO `api_permissions` VALUES (1,'1460dc644f545ea518fbbe37732d97079c692456d9bad3058ed9b4bcea9c2ee662d5063bd6c336a908c6fc6349ba26a4ecb891bc226184dc223320e2df8fa742',1),(2,'1460dc644f545ea518fbbe37732d97079c692456d9bad3058ed9b4bcea9c2ee662d5063bd6c336a908c6fc6349ba26a4ecb891bc226184dc223320e2df8fa742',2),(3,'1460dc644f545ea518fbbe37732d97079c692456d9bad3058ed9b4bcea9c2ee662d5063bd6c336a908c6fc6349ba26a4ecb891bc226184dc223320e2df8fa742',3),(4,'1460dc644f545ea518fbbe37732d97079c692456d9bad3058ed9b4bcea9c2ee662d5063bd6c336a908c6fc6349ba26a4ecb891bc226184dc223320e2df8fa742',4),(5,'1460dc644f545ea518fbbe37732d97079c692456d9bad3058ed9b4bcea9c2ee662d5063bd6c336a908c6fc6349ba26a4ecb891bc226184dc223320e2df8fa742',5),(6,'1460dc644f545ea518fbbe37732d97079c692456d9bad3058ed9b4bcea9c2ee662d5063bd6c336a908c6fc6349ba26a4ecb891bc226184dc223320e2df8fa742',6),(7,'1460dc644f545ea518fbbe37732d97079c692456d9bad3058ed9b4bcea9c2ee662d5063bd6c336a908c6fc6349ba26a4ecb891bc226184dc223320e2df8fa742',7),(8,'1460dc644f545ea518fbbe37732d97079c692456d9bad3058ed9b4bcea9c2ee662d5063bd6c336a908c6fc6349ba26a4ecb891bc226184dc223320e2df8fa742',8),(9,'1460dc644f545ea518fbbe37732d97079c692456d9bad3058ed9b4bcea9c2ee662d5063bd6c336a908c6fc6349ba26a4ecb891bc226184dc223320e2df8fa742',9),(10,'1460dc644f545ea518fbbe37732d97079c692456d9bad3058ed9b4bcea9c2ee662d5063bd6c336a908c6fc6349ba26a4ecb891bc226184dc223320e2df8fa742',10),(11,'1460dc644f545ea518fbbe37732d97079c692456d9bad3058ed9b4bcea9c2ee662d5063bd6c336a908c6fc6349ba26a4ecb891bc226184dc223320e2df8fa742',11);
             EOM;
             $mysql = new mysql_(DEFAULT_DB_CONN);
             // check if the db exists
-            $check_sql = "SELECT
+            if(SAFE_FIRST_TIME !== false) {
+                $check_sql = "SELECT
                             SCHEMA_NAME
                         FROM
                             INFORMATION_SCHEMA.SCHEMATA
                         WHERE
                             SCHEMA_NAME = 'api'";
-            $mysql->sql_select($check_sql);
-            if($mysql->result->num_rows == 1) {
-                // The databse already exists
-                return [
-                    'success' => false,
-                    'data' => null,
-                    'error' => DB_ALREADY_EXISTS
-                ];
+                $mysql->sql_select($check_sql);
+                if($mysql->result->num_rows == 1) {
+                    // The databse already exists
+                    return [
+                        'success' => false,
+                        'data' => null,
+                        'error' => DB_ALREADY_EXISTS
+                    ];
+                }
+            } else {
+                $mysql->sql_exec('DROP DATABASE api', '');
             }
+            
             for($i = 0; $i < count($sql); $i++) {
                 if($i === 0) {
                     $mysql->sql_exec($sql[$i], '');

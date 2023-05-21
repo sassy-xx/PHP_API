@@ -8,6 +8,7 @@
 
     // Force the application to try to create the DB structure before it looks at any requests (FIRST TIME SETUP ONLY!)
         $first_time_setup = false;
+        $safe_first_time = true;
     
     // file paths
         $root = $_SERVER['DOCUMENT_ROOT'].'/';
@@ -100,6 +101,7 @@
         define('DELETE_DB_ERROR', $db_delete_err);
         define('UPDATE_DB_ERROR', $db_udpate_err);
         define('INCORRECT_PARAMETERS', $bad_params);
+        define('SAFE_FIRST_TIME', $safe_first_time);
     // require the main functions file (global functions etc)
     require_once(DOCUMENT_ROOT.'/php/includes/functions.php');
     
