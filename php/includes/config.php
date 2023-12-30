@@ -9,7 +9,7 @@
     } catch(\Exception $e) {
         die('Failed to load the required environment configuration file. Cannot continue.');
     }
-    
+
     // Create constants from the loaded environment variables
     foreach($_ENV as $k => $v) {
         // Ensure this constant has not already been defined
@@ -17,6 +17,8 @@
             // Check if this is the NO_TOKEN_ENDPOINTS env var as this will need json_decoding
             if($k === "NO_TOKEN_ENDPOINTS") {
                 define("NO_TOKEN_ENDPOINTS", json_decode($_ENV['NO_TOKEN_ENDPOINTS'], true));
+            } else if($k === "ALLOWED_REQUEST_METHODS") {
+                define("ALLOWED_REQUEST_METHODS", json_decode($_ENV['ALLOWED_REQUEST_METHODS'], true));
             } else {
                 define($k, $v);
             }
@@ -26,12 +28,6 @@
     if(FORCE_JSON) {
         header('Content-type: application/json');
     }
-
-        // Methods of request which are allowed
-        $allowed_request_methods = [
-            'GET',
-            'POST'
-        ];
 
     // main language section
         $bad_request_method = 'The request method is not valid!';
@@ -62,7 +58,6 @@
         define('BAD_PERMISSIONS', $bad_permissions);
         define('UNKNOWN_ERROR', $unknown_error);
         define('API_TOKEN_EXPIRED', $api_token_expired);
-        define('ALLOWED_REQUEST_METHODS', $allowed_request_methods);
         define('DB_ALREADY_EXISTS', $db_exists);
         define('INSERT_DB_ERROR', $db_insert_err);
         define('SELECT_DB_ERROR', $db_select_err);
