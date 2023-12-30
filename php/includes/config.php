@@ -20,30 +20,7 @@
     if(FORCE_JSON) {
         header('Content-type: application/json');
     }
-    
-    // SQL detials
-    
-        // localhost db connection
-        $local_hostname = 'localhost';
-        $local_username = 'root';
-        $local_password = '10584066';
 
-        // live db connection
-        $live_hostname = '';
-        $live_username = '';
-        $live_password = '';
-
-        // read replica db connection
-        $readrep_hostname = '';
-        $readrep_username = '';
-        $readrep_password = '';
-    
-        // selected db connection (for any set using the defined constant)
-            // options are:
-                // localhost
-                // live_conn
-                // readrep
-        $default_db_conn = 'localhost';
     // main API configuration section
 
         // Token expiration time
@@ -92,16 +69,6 @@
         define('API_TOKEN_EXEMPT', $no_token_endpoints);
         define('ALLOWED_REQUEST_METHODS', $allowed_request_methods);
         define('TOKEN_EXPIRE_TIME', $token_expiry_time);
-        define('DB_LOCAL_HOSTNAME', $local_hostname);
-        define('DB_LOCAL_USERNAME', $local_username);
-        define('DB_LOCAL_PASSWORD', $local_password);
-        define('DB_LIVE_HOSTNAME', $live_hostname);
-        define('DB_LIVE_USERNAME', $live_username);
-        define('DB_LIVE_PASSWORD', $live_password);
-        define('DB_READREP_HOSTNAME', $readrep_hostname);
-        define('DB_READREP_USERNAME', $readrep_username);
-        define('DB_READREP_PASSWORD', $readrep_password);
-        define('DEFAULT_DB_CONN', $default_db_conn);
         define('DB_ALREADY_EXISTS', $db_exists);
         define('INSERT_DB_ERROR', $db_insert_err);
         define('SELECT_DB_ERROR', $db_select_err);
