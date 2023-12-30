@@ -9,13 +9,13 @@
     
     // init empty defaults
 
-    // mapped test vals for now
     $request_method = $_SERVER['REQUEST_METHOD'];
     $api_key = '';
     $api_secret_key = '';
     $api_endpoint = '';
     $api_token = '';
     $data = [];
+
     // set easy vars
     foreach($_REQUEST as $k => $v) {
         $$k = $v;
@@ -29,6 +29,8 @@
         }
     }
     if(isset($api_endpoint) && !empty(trim($api_endpoint))) {
+        // We are initialising here. (Not direct from endpoint file)
+
     } else {
         if($_SERVER['PHP_SELF'] !== 'index.php') {
             // API endpoint file is were we came from
@@ -57,7 +59,7 @@
     // Check the API key has permission to access the requested endpoint
     $api->init_permissions();
     // Check if the API endpoint being executed requires a token
-    if(!in_array($api_endpoint, API_TOKEN_EXEMPT)) {
+    if(!in_array($api_endpoint, NO_TOKEN_ENDPOINTS)) {
         $api->check_token();
         if(!in_array($api_endpoint, $api->permissions)) {
             api_handler::error(403, BAD_PERMISSIONS);
