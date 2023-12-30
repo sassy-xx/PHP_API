@@ -187,7 +187,7 @@
                 self::error(403, UNKNOWN_ERROR);
             }
             // search the root endpoint directory for the specified endpoint
-            $endpoints = new file_finder(DOCUMENT_ROOT.'/api/');
+            $endpoints = new file_finder($_SERVER['DOCUMENT_ROOT'].'/api/');
             foreach($endpoints->files as $v) {
                 if(str_contains($v, $this->api_endpoint.'.php')) {
                     // Require the API endpoint file
