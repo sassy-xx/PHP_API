@@ -17,7 +17,9 @@
         }
     }
 
+    if(FORCE_JSON) {
         header('Content-type: application/json');
+    }
 
     // file paths
         $root = $_SERVER['DOCUMENT_ROOT'].'/';
