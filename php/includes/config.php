@@ -1,6 +1,22 @@
-<?php // Main configuration file
+<?php
+    // Main config file
 
-    // debug settings
+    // Load the .env variables and create constants from them
+    try {
+        $dotenv = Dotenv\Dotenv::createImmutable(__DIR__.'../../../config');
+        $dotenv->load();
+        $dotenv->required(['ENVIRONMENT_TYPE']);
+    } catch(\Exception $e) {
+        die('Failed to load the required environment configuration file. Cannot continue.');
+    }
+    // Create constants from the loaded environment variables
+    foreach($_ENV as $k => $v) {
+        // Ensure this constant has not already been defined
+        if(!defined($k)) {
+            define($k, $v);
+        }
+    }
+
         mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
     
     // Force appication/json returns from the server
