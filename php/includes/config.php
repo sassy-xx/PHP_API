@@ -23,9 +23,6 @@
 
     // main API configuration section
 
-        // Token expiration time
-        $token_expiry_time = 1800; // seconds to token expiry
-
         // Endpoints which will not require a token
         $no_token_endpoints = [
             'get_token'
@@ -68,7 +65,6 @@
         define('API_TOKEN_EXPIRED', $api_token_expired);
         define('API_TOKEN_EXEMPT', $no_token_endpoints);
         define('ALLOWED_REQUEST_METHODS', $allowed_request_methods);
-        define('TOKEN_EXPIRE_TIME', $token_expiry_time);
         define('DB_ALREADY_EXISTS', $db_exists);
         define('INSERT_DB_ERROR', $db_insert_err);
         define('SELECT_DB_ERROR', $db_select_err);
