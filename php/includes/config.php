@@ -20,9 +20,6 @@
     if(FORCE_JSON) {
         header('Content-type: application/json');
     }
-
-    // file paths
-        $root = $_SERVER['DOCUMENT_ROOT'].'/';
     
     // SQL detials
     
@@ -82,7 +79,6 @@
         $unknown_error = 'An unkown error has occored!';
 
     // definitions of global constants
-        define('DOCUMENT_ROOT', $root);
         define('BAD_REQUEST_METHOD', $bad_request_method);
         define('BAD_API_REQUEST', $bad_api_request);
         define('BAD_API_KEY', $bad_api_key);
@@ -113,13 +109,13 @@
         define('UPDATE_DB_ERROR', $db_udpate_err);
         define('INCORRECT_PARAMETERS', $bad_params);
     // require the main functions file (global functions etc)
-    require_once(DOCUMENT_ROOT.'/php/includes/functions.php');
+    require_once('./php/includes/functions.php');
     
     // require the main class list file (refreences all main class files)
-    require_once(DOCUMENT_ROOT.'/php/includes/class_loader.php');
+    require_once('./php/includes/class_loader.php');
 
     // Require everything in the php/includes/auto_load direcotry
-    $auto_load = new file_finder(DOCUMENT_ROOT.'/php/includes/auto_loader/');
+    $auto_load = new file_finder('./php/includes/auto_loader/');
     foreach($auto_load->files as $v) {
         require_once($v);
     }
