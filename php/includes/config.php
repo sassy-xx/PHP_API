@@ -9,24 +9,23 @@
     } catch(\Exception $e) {
         die('Failed to load the required environment configuration file. Cannot continue.');
     }
+    
     // Create constants from the loaded environment variables
     foreach($_ENV as $k => $v) {
         // Ensure this constant has not already been defined
         if(!defined($k)) {
-            define($k, $v);
+            // Check if this is the NO_TOKEN_ENDPOINTS env var as this will need json_decoding
+            if($k === "NO_TOKEN_ENDPOINTS") {
+                define("NO_TOKEN_ENDPOINTS", json_decode($_ENV['NO_TOKEN_ENDPOINTS'], true));
+            } else {
+                define($k, $v);
+            }
         }
     }
 
     if(FORCE_JSON) {
         header('Content-type: application/json');
     }
-
-    // main API configuration section
-
-        // Endpoints which will not require a token
-        $no_token_endpoints = [
-            'get_token'
-        ];
 
         // Methods of request which are allowed
         $allowed_request_methods = [
@@ -63,7 +62,6 @@
         define('BAD_PERMISSIONS', $bad_permissions);
         define('UNKNOWN_ERROR', $unknown_error);
         define('API_TOKEN_EXPIRED', $api_token_expired);
-        define('API_TOKEN_EXEMPT', $no_token_endpoints);
         define('ALLOWED_REQUEST_METHODS', $allowed_request_methods);
         define('DB_ALREADY_EXISTS', $db_exists);
         define('INSERT_DB_ERROR', $db_insert_err);
