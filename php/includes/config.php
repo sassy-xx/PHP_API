@@ -50,6 +50,7 @@
             if(!$first_time_setup['success']) {
                 trigger_error($first_time_setup['error'], E_USER_WARNING);
             }
+            die();
         }
     }
 ?>
