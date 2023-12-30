@@ -1,5 +1,9 @@
 <?php
     session_start();
+    
+    // Load the autoloader for composer packages
+    require 'vendor/autoload.php';
+    
     // require the main configuration file (constants/globals/requires etc)
     require_once($_SERVER['DOCUMENT_ROOT'].'/php/includes/config.php');
     
