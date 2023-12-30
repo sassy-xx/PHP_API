@@ -17,14 +17,8 @@
         }
     }
 
-        mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
-    
-    // Force appication/json returns from the server
         header('Content-type: application/json');
 
-    // Force the application to try to create the DB structure before it looks at any requests (FIRST TIME SETUP ONLY!)
-        $first_time_setup = false;
-    
     // file paths
         $root = $_SERVER['DOCUMENT_ROOT'].'/';
     
@@ -127,10 +121,16 @@
     foreach($auto_load->files as $v) {
         require_once($v);
     }
-    if($first_time_setup === true) {
-        $first_time_setup = api_handler::first_time_setup();
-        if(!$first_time_setup['success']) {
-            trigger_error($first_time_setup['error'], E_USER_WARNING);
+
+    // ENVIRONMENT_TYPE check (stops dangerous combos of live and setup vars)
+    if(ENVIRONMENT_TYPE === 'local') {
+        // Enable all debugging of MySQL errors
+        mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+        if(FIRST_TIME_SETUP) {
+            $first_time_setup = api_handler::first_time_setup();
+            if(!$first_time_setup['success']) {
+                trigger_error($first_time_setup['error'], E_USER_WARNING);
+            }
         }
     }
 ?>
