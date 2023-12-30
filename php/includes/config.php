@@ -30,13 +30,13 @@
     }
 
     // require the main functions file (global functions etc)
-    require_once('./php/includes/functions.php');
+    require_once(__DIR__.'../../../php/includes/functions.php');
     
     // require the main class list file (refreences all main class files)
-    require_once('./php/includes/class_loader.php');
+    require_once(__DIR__.'../../../php/includes/class_loader.php');
 
     // Require everything in the php/includes/auto_load direcotry
-    $auto_load = new file_finder('./php/includes/auto_loader/');
+    $auto_load = new file_finder(__DIR__.'../../../php/includes/auto_loader/');
     foreach($auto_load->files as $v) {
         require_once($v);
     }
